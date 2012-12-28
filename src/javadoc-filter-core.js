@@ -9,7 +9,6 @@ Filter.defaultStr = "フィルター";
 Filter.emptyStr = "";
 Filter.defaultColor = "#969696";
 Filter.inputColor = "#000000";
-Filter.all;
 Filter.index;
 Filter.indexChar = [
 	"a", "b", "c", "d", "e", "f", "g", "h", "i",
@@ -20,9 +19,10 @@ Filter.innerList;
 Filter.innerObj;
 Filter.compare;
 Filter.compareObj;
-Filter.splash = "JavaDoc Filter Ver1.2<br>Initializing ... ";
+Filter.splash = "JavaDoc Filter Ver1.3<br>Initializing ... ";
 Filter.filter;
-Filter.package;
+Filter.classListAll;
+Filter.classList;
 
 function splash() {
 	$(top.packageFrame.document.body).append("" +
@@ -90,26 +90,30 @@ function initialize() {
 
 	}
 
-	Filter.all = list.join("<br>");
+	var all = list.join("<br>");
 	Filter.innerList[cIndex] = innerList;
 	Filter.innerObj[cIndex] = innerList.join("<br>");
 	Filter.compareObj[cIndex] = compareList;
 
 	$(top.packageFrame.document.body.lastChild).remove();
-	// ～ java SE 6
+	// ～ java 6
 	$(top.packageFrame.document.body).find("table").css("visibility", "hidden");
-	// java SE 7 ～
+	// java 7 ～
 	$(top.packageFrame.document.body).find("ul").css("visibility", "hidden");
 
 	$(top.packageFrame.document.body).append("" +
 		"<div style='position: absolute; top: 5px; left: 5px; width: 95%; " +
 					"font-size: 90%; font-family: Helvetica,Arial,sans-serif;'>" +
 			"<div>" +
-				"<input id='filter' type='text' style='width: 95%;'>" +
+				"<input id='filter' type='text' onclick='this.select()' style='width: 95%;'>" +
 			"</div>" +
-			"<div id='package' style='width: 100%; height: 100%; padding: 8px;'>" +
-				Filter.all +
 			"<div>" +
+				"<div id='classListAll' style='width: 100%; height: 100%; padding: 8px; position: absolute; top: 0xp;'>" +
+					all +
+				"</div>" +
+				"<div id='classList' style='width: 100%; height: 100%; padding: 8px; position: rerative; top: 0px; visibility: hidden;'>" +
+				"</div>" +
+			"</div>" +
 		"<div>");
 
 	var filter = $(top.packageFrame.document.body).find("#filter");
@@ -129,26 +133,30 @@ function initialize() {
 
 	filter.keyup(function (e) {
 		if (this.value == "") {
-			Filter.package.html(Filter.all);
+			Filter.classListAll.css("visibility", "visible");
+			Filter.classList.css("visibility", "hidden");
 			return;
 		}
+		Filter.classListAll.css("visibility", "hidden");
+		Filter.classList.css("visibility", "visible");
 		setTimeout("filtering('" + this.value.toLowerCase() + "')", 0);
 	});
 
 	Filter.filter = filter;
-	Filter.package = $(top.packageFrame.document.body).find("#package");
+	Filter.classListAll = $(top.packageFrame.document.body).find("#classListAll");
+	Filter.classList = $(top.packageFrame.document.body).find("#classList");
 
 };
 
 function filtering(filterStr) {
 	if (filterStr.length == 1) {
-		Filter.package.html(Filter.innerObj[filterStr] == undefined ? "" : Filter.innerObj[filterStr]);
+		Filter.classList.html(Filter.innerObj[filterStr] == undefined ? "" : Filter.innerObj[filterStr]);
 		return;
 	}
 
 	var c = filterStr.substring(0, 1);
 	if (Filter.innerList[c] == undefined) {
-		Filter.package.html("");
+		Filter.classList.html("");
 		return;
 	}
 	Filter.inner = Filter.innerList[c];
@@ -161,7 +169,7 @@ function filtering(filterStr) {
 		}
 	}
 	if (filterStr == Filter.filter[0].value.toLowerCase()) {
-		Filter.package.html(aList.join("<br>"));
+		Filter.classList.html(aList.join("<br>"));
 	}
 }
 
