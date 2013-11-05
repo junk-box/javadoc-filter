@@ -1,17 +1,17 @@
 /*
- * JavaDoc Filter v1.4
+ * JavaDoc Filter v1.5
  * http://junk-box.appspot.com/appdocs/java/index.html
  * 
  * Copyright (C) 2011 S.Ishigaki
  * Licensed under the MIT license
  * http://www.opensource.org/licenses/mit-license.php
  * 
- * Date: 2013-5-26
+ * Date: 2013-11-6
  */
 (function() {
 
 var
-	version = "1.4",
+	version = "1.5",
 
 	defaultStr = "フィルター",
 
@@ -98,6 +98,7 @@ var
 				classes = [];
 				names = [];
 				indexCount = index;
+				cIndex = c;
 			}
 
 			var aStr = toHtml(aList[i])
