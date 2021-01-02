@@ -1,4 +1,4 @@
-[JavaDoc Filter](http://junk-box.appspot.com/appdocs/java/index.html)
+[JavaDoc Filter](https://junk-box.github.io/javadoc-filter/index.html)
 =====================================================================
 
 これは？

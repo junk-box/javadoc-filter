@@ -1,19 +1,19 @@
 /*
- * JavaDoc Filter v1.5
- * http://junk-box.appspot.com/appdocs/java/index.html
+ * JavaDoc Filter v1.6
+ * https://github.com/junk-box/javadoc-filter
  * 
  * Copyright (C) 2011 S.Ishigaki
  * Licensed under the MIT license
  * http://www.opensource.org/licenses/mit-license.php
  * 
- * Date: 2013-11-6
+ * Date: 2017-5-5
  */
 (function() {
 
 var
-	version = "1.5",
+	version = "1.6",
 
-	defaultStr = "フィルター",
+	defaultStr = "Filter",
 
 	emptyStr = "",
 
