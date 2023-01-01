@@ -1,0 +1,29 @@
+li.new:before {
+	content: "[new] ";
+	color: blue;
+	font-weight: bold;
+}
+
+li.fix:before {
+	content: "[fix] ";
+	color: green;
+	font-weight: bold;
+}
+
+li.change:before {
+	content: "[change] ";
+	color: purple;
+	font-weight: bold;
+}
+
+li.remove:before {
+	content: "[remove] ";
+	color: red;
+	font-weight: bold;
+}
+
+li.etc:before {
+	content: "[etc] ";
+	color: gray;
+	font-weight: bold;
+}
