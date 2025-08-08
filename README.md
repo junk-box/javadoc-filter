@@ -12,7 +12,7 @@ javadocのクラス一覧をフィルタリングする ブックマークレッ
 
 次のコードをブックマークとして登録します。
 ```js
-javascript:(function(){var b=function(b){var a=document.createElement('script');a.setAttribute('language','javascript');a.setAttribute('charset','UTF-8');a.setAttribute('src',b);document.body.appendChild(a)};b('https://junk-box.github.io/javadoc-filter/js/jquery.js');b('https://junk-box.github.io/javadoc-filter/js/javadoc-filter-core.js')})();
+javascript:(function(){var b=function(b){var a=document.createElement('script');a.setAttribute('language','javascript');a.setAttribute('charset','UTF-8');a.setAttribute('src',b);document.body.appendChild(a)};b('https://junk-box.github.io/javadoc-filter/js/javadoc-filter-core.js')})();
 ```
 
 使用方法

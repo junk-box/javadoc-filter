@@ -1,19 +1,21 @@
 /*
- * JavaDoc Filter v1.5
- * http://junk-box.appspot.com/appdocs/java/index.html
+ * JavaDoc Filter v1.6
+ * https://junk-box.github.io/javadoc-filter/index.html
  * 
- * Copyright (C) 2011 S.Ishigaki
+ * Copyright (C) 2025 S.Ishigaki
  * Licensed under the MIT license
  * http://www.opensource.org/licenses/mit-license.php
  * 
- * Date: 2013-11-6
+ * Date: 2025-08-08
  */
 (function() {
 
 var
-	version = "1.5",
+	version = "1.6",
 
 	defaultStr = "フィルター",
+
+	frameDocument = top.packageFrame.document,
 
 	emptyStr = "",
 
@@ -44,28 +46,37 @@ var
 	divList,
 
 	splash = function() {
-		$(top.packageFrame.document.body).append("" +
-			"<div style='position: absolute; top: 5px; left: 5px; " +
-						"width: 95%; font-weight: bold; " +
-						"background-color: #e5ecf9; " +
-						"border: 1px solid #000; border-color: #c5d7ef;'>" +
-				"<div style='padding: 2px 3px; font-size: 80%'>" +
-					"JavaDoc Filter Ver" + version + "<br>Initializing ... " +
-				"</div>" +
-			"</div>");
+		let splashContent = document.createElement("div");
+		splashContent.style.padding = "2px 3px";
+		splashContent.style.fontSize = "80%";
+		splashContent.innerHTML = "JavaDoc Filter Ver" + version + "<br>Initializing ... ";
+
+		let splashFrame = document.createElement("div");
+		splashFrame.style.position = "absolute";
+		splashFrame.style.top = "8px";
+		splashFrame.style.left = "8px";
+		splashFrame.style.width = "80%";
+		splashFrame.style.fontWeight = "bold";
+		splashFrame.style.backgroundColor = "#e5ecf9";
+		splashFrame.style.border = "1px solid #000";
+		splashFrame.style.borderColor = "#c5d7ef";
+		splashFrame.appendChild(splashContent);
+
+		frameDocument.body.appendChild(splashFrame);
+
 		setTimeout(initialize, 500);
 	},
 
 	initialize = function() {
-		if ($(top.packageFrame.document.body).find("#filter").length > 0) {
-			alert("JavaDoc Filter is already runnning.")
-			$(top.packageFrame.document.body.lastChild).remove();
+		let existingFilter  = frameDocument.getElementById("filter");
+		if (existingFilter != null) {
+			alert("JavaDoc Filter is already runnning.");
+			existingFilter.parentNode.removeChild(existingFilter);
 			location.reload();
 			return;
 		}
 
-		var aList = $(top.packageFrame.document.body.innerHTML).find("a");
-
+		var aList = frameDocument.getElementsByTagName("a");
 		var list = [];
 		var classes = [];
 		var names = [];
@@ -113,69 +124,102 @@ var
 		initialFix[cIndex] = classes.join("<br>");
 		nameList[cIndex] = names;
 
-		$(top.packageFrame.document.body.lastChild).remove();
+		let splash = frameDocument.body.lastChild;
+		splash.parentNode.removeChild(splash);
 		// ～ java 6
-		$(top.packageFrame.document.body).find("table").css("visibility", "hidden");
+		let before6 = frameDocument.getElementsByTagName("table");
+		if (before6.length > 0) before6[0].style.visibility = "hidden";
 		// java 7 ～
-		$(top.packageFrame.document.body).find("ul").css("visibility", "hidden");
+		let after7 = frameDocument.getElementsByTagName("ul");
+		if (after7.length > 0) after7[0].style.visibility = "hidden";
 
-		$(top.packageFrame.document.body).append("" +
-			"<div style='position: absolute; top: 5px; left: 5px; width: 95%; " +
-						"font-size: 90%; font-family: Helvetica,Arial,sans-serif;'>" +
-				"<div>" +
-					"<input id='filter' type='text' onclick='this.select()' style='width: 95%;'>" +
-				"</div>" +
-				"<div>" +
-					"<div id='classListAll' style='width: 100%; height: 100%; padding: 8px; position: absolute; top: 0xp;'>" +
-						all +
-					"</div>" +
-					"<div id='classList' style='width: 100%; height: 100%; padding: 8px; position: rerative; top: 0px; visibility: hidden;'>" +
-					"</div>" +
-				"</div>" +
-			"<div>");
+		let input = document.createElement("input");
+		input.id = "filter";
+		input.type = "text";
+		input.onclick = "this.select()";
+		input.style.width = "95%";
 
-		var f = $(top.packageFrame.document.body).find("#filter");
-		f.val(defaultStr).css("color", defaultColor);
-		f.focus(function (e) {
+		let divInput = document.createElement("div");
+		divInput.appendChild(input);
+
+		let divClassListAll = document.createElement("div");
+		divClassListAll.id = "classListAll";
+		divClassListAll.style.width = "100%";
+		divClassListAll.style.height = "100%";
+		divClassListAll.style.padding = "8px";
+		divClassListAll.style.position = "absolute";
+		divClassListAll.style.top = "0px";
+		divClassListAll.innerHTML = all;
+
+		let divClassList = document.createElement("div");
+		divClassList.id = "classList";
+		divClassList.style.width = "100%";
+		divClassList.style.height = "100%";
+		divClassList.style.padding = "8px";
+		divClassList.style.position = "absolute";
+		divClassList.style.top = "0px";
+		divClassList.style.visibility = "hidden";
+
+		let clsList = document.createElement("div");
+		clsList.style.position = "relative";
+		clsList.append(divClassListAll);
+		clsList.append(divClassList);
+
+		let divFilter = document.createElement("div");
+		divFilter.style.position = "absolute";
+		divFilter.style.top = "8px";
+		divFilter.style.left = "8px";
+		divFilter.style.width = "80%";
+		divFilter.style.fontSize = "90%";
+		divFilter.style.fontFamily = "Helvetica,Arial,sans-serif";
+		divFilter.appendChild(divInput);
+		divFilter.appendChild(clsList);
+
+		frameDocument.body.appendChild(divFilter);
+
+		input.value = defaultStr;
+		input.style.color = defaultColor;
+		input.onfocus = function() {
 			if (this.value == defaultStr) {
-				$(this).val(emptyStr).css("color", inputColor);
+				this.value = emptyStr;
+				this.style.color = inputColor;
 			}
-		});
-		f.blur(function () {
+		};
+		input.onblur = function() {
 			if (this.value == emptyStr) {
-				$(this).val(defaultStr).css("color", defaultColor);
+				input.value = defaultStr;
+				input.style.color = defaultColor;
 			} else if (this.value != defaultStr) {
-				$(this).css("color", inputColor);
+				this.style.color = inputColor;
 			}
-		});
+		};
 
-		f.keyup(function (e) {
+		input.onkeyup = function() {
 			if (this.value == "") {
-				divAll.css("visibility", "visible");
-				divList.css("visibility", "hidden");
+				divAll.style.visibility = "visible";
+				divList.style.visibility = "hidden";
 				return;
 			}
-			divAll.css("visibility", "hidden");
-			divList.css("visibility", "visible");
+			divAll.style.visibility = "hidden";
+			divList.style.visibility = "visible";
 			setTimeout(filtering(this.value.toLowerCase()), 0);
-		});
+		};
 
-		filter = f;
-		divAll = $(top.packageFrame.document.body).find("#classListAll");
-		divList = $(top.packageFrame.document.body).find("#classList");
-
-		filter.focus();
+		filter = input;
+		divAll = divClassListAll;
+		divList = divClassList;
+		input.focus();
 	},
 
 	filtering = function(filterStr) {
 		if (filterStr.length == 1) {
-			divList.html(initialFix[filterStr] == undefined ? "" : initialFix[filterStr]);
+			divList.innerHTML = initialFix[filterStr] == undefined ? "" : initialFix[filterStr];
 			return;
 		}
 
 		var c = filterStr.substring(0, 1);
 		if (classList[c] == undefined) {
-			divList.html("");
+			divList.innerHTML = "";
 			return;
 		}
 		initialClass = classList[c];
@@ -185,8 +229,8 @@ var
 		for (var i = 0; i < initialClass.length; i++) {
 			if (initialName[i].indexOf(filterStr) == 0) aList.push(initialClass[i]);
 		}
-		if (filterStr == filter[0].value.toLowerCase()) {
-			divList.html(aList.join("<br>"));
+		if (filterStr == filter.value.toLowerCase()) {
+			divList.innerHTML= aList.join("<br>");
 		}
 	},
 
@@ -211,13 +255,7 @@ var
 		html.push("</a>");
 
 		return html.join("");
-	},
+	}
 
-	id = setInterval(function(){
-		if (window['$']) {
-			window.clearInterval(id);
-			splash();
-		}
-	},100);
-
+	splash();
 })();

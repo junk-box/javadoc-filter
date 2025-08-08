@@ -6,6 +6,5 @@
 		s.setAttribute('src', url);
 		document.body.appendChild(s);
 	};
-	load('https://junk-box.github.io/javadoc-filter/js/jquery.js');
 	load('https://junk-box.github.io/javadoc-filter/js/javadoc-filter-core.js');
 })();
